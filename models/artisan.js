@@ -27,7 +27,7 @@ const artisanSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    default: "Artisan",
+    default: "artisan",
     required: true,
   },
   businessName: {
@@ -88,6 +88,11 @@ const artisanSchema = new mongoose.Schema({
     type: String,
   },
   comments: [commentSchema],
+});
+
+// friend count
+artisanSchema.virtual("commentCount").get(function () {
+  return this.comments.length;
 });
 
 // hash password

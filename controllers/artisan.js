@@ -1,7 +1,7 @@
-const artisan = require("../models/artisan");
+const Artisan = require("../models/artisan");
 
 const getAllArtisan = async (req, res) => {
-  const artisans = artisan.find({});
+  const artisans = await Artisan.find({});
 
   res.status(200).json({ artisans: artisans });
 };

@@ -7,7 +7,8 @@ const connectDB = require("./connectionDB/connection");
 
 // Import Routers
 const authRouter = require("./routers/auth");
-
+const userRouter = require("./routers/user");
+const artisanRouter = require("./routers/artisan");
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -18,6 +19,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", authRouter);
+app.use("/user", userRouter);
+app.use("/artisan", artisanRouter);
 
 const port = 5000 || process.env.PORT;
 

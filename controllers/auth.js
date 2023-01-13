@@ -1,9 +1,10 @@
 const Artisan = require("../models/artisan");
+const User = require("../models/user");
 const upload = require("../multer");
 const fs = require("fs");
 const path = require("path");
 
-const signUp = async (req, res) => {
+const artisanSignUp = async (req, res) => {
   const artisan = await Artisan.create({
     ...req.body,
   });
@@ -13,4 +14,14 @@ const signUp = async (req, res) => {
   res.status(201).json({ artisan: { artisan }, token });
 };
 
-module.exports = { signUp };
+const userSignUp = async (req, res) => {
+  const user = await User.create({
+    ...req.body,
+  });
+
+  const token = user.createJWT();
+
+  res.status(201).json({ user, token });
+};
+
+module.exports = { artisanSignUp, userSignUp };
