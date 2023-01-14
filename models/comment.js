@@ -22,6 +22,10 @@ const commentSchema = new Schema(
       type: Date,
       default: Date.now,
     },
+    read: {
+      type: Boolean,
+      default: false,
+    },
     likes: [
       {
         type: Schema.Types.ObjectId,
@@ -37,7 +41,6 @@ const commentSchema = new Schema(
     id: false,
   }
 );
-
 
 // likes count
 commentSchema.virtual("likesCount").get(function () {

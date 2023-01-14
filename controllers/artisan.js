@@ -5,6 +5,7 @@ const getAllArtisan = async (req, res) => {
 
   res.status(200).json({ artisans: artisans });
 };
+
 const getArtisan = async (req, res) => {
   const { id } = req.params;
   const artisan = await Artisan.find({ _id: id });
@@ -12,4 +13,15 @@ const getArtisan = async (req, res) => {
   res.status(200).json(artisan);
 };
 
-module.exports = { getAllArtisan, getArtisan };
+const readComment = async (req, res) => {
+  const { artisanId, commentId } = req.params;
+
+  const artisan = await Artisan.findOneAndUpdate(
+    { _id: artisanId, "comments.commentId": commentId },
+    { $set: { "comments.$.read": true } },
+    { new: true, runValidators: true }
+  );
+
+  res.json({ artisan });
+};
+module.exports = { getAllArtisan, getArtisan, readComment };

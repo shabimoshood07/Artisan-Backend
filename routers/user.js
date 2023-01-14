@@ -9,6 +9,7 @@ const router = express.Router();
 
 router.get("/", getAllUsers);
 router.post("/comment/:artisanId/:userId", addComment);
-router.put("/likes/:artisanId/:commentId/:userId", addLikes);
+router.put("/like/:artisanId/:commentId/:userId", addLikes);
+router.put("/unlike/:artisanId/:commentId/:userId", unLike);
 
 module.exports = router;

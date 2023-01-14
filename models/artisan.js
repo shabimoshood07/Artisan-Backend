@@ -104,6 +104,12 @@ artisanSchema.virtual("commentCount").get(function () {
   return this.comments.length;
 });
 
+artisanSchema.virtual("unreadCount").get(function () {
+  const unreadcomments = this.comments.filter((comm) => comm.read === false);
+
+  return unreadcomments.length;
+});
+
 // hash password
 artisanSchema.pre("save", async function () {
   const salt = await bcrypt.genSalt(10);
