@@ -3,7 +3,7 @@ const Artisan = require("../models/artisan");
 const getAllArtisan = async (req, res) => {
   const artisans = await Artisan.find({});
 
-  res.status(200).json({ artisans: artisans });
+  res.status(200).json({ artisans: artisans, number: artisans.length });
 };
 
 const getArtisan = async (req, res) => {

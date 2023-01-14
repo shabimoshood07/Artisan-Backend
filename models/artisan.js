@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 var uniqueValidator = require("mongoose-unique-validator");
 var mongooseTypePhone = require("mongoose-type-phone");
 const commentSchema = require("./comment");
+const ratingSchema = require("./rating");
 
 const artisanSchema = new mongoose.Schema(
   {
@@ -89,6 +90,7 @@ const artisanSchema = new mongoose.Schema(
       type: String,
     },
     comments: [commentSchema],
+    ratings: [ratingSchema],
   },
   {
     toJSON: {
@@ -102,6 +104,12 @@ const artisanSchema = new mongoose.Schema(
 // comment count
 artisanSchema.virtual("commentCount").get(function () {
   return this.comments.length;
+});
+
+artisanSchema.virtual("rating").get(function () {
+  let total = 0;
+  this.ratings.map((rate) => (total += rate.ratingValue));
+  return (total / this.ratings.length).toFixed(1);
 });
 
 artisanSchema.virtual("unreadCount").get(function () {
