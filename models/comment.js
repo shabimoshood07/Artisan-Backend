@@ -24,17 +24,24 @@ const commentSchema = new Schema(
     },
     likes: [
       {
-          type: Schema.Types.ObjectId,
-          ref: 'User'
-      }
-  ]
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     toJSON: {
+      virtuals: true,
       getters: true,
     },
     id: false,
   }
 );
+
+
+// likes count
+commentSchema.virtual("likesCount").get(function () {
+  return this.likes.length;
+});
 
 module.exports = commentSchema;

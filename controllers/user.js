@@ -4,7 +4,7 @@ const Comment = require("../models/comment");
 
 const getAllUsers = async (req, res) => {
   const users = await User.find({});
-  res.send(200).json(users);
+  res.status(200).json(users);
 };
 
 const addComment = async (req, res) => {
@@ -22,27 +22,30 @@ const addComment = async (req, res) => {
 
 const addLikes = async (req, res) => {
   const { artisanId, commentId, userId } = req.params;
-
-  // const artisan = await Artisan.findById(artisanId);
-
-  // const comment = await artisan.comments.find( commentId);
-
-  // res.json({ comment });
-
   const artisan = await Artisan.findOneAndUpdate(
-    { "_id": artisanId, "comments._id": commentId },
+    { _id: artisanId, "comments.commentId": commentId },
     {
-      "$set": {
+      $push: {
         "comments.$.likes": userId,
       },
     },
-    { runValidators: true }
+    { new: true, runValidators: true }
   );
-
-  // if (!user) {
-  //   res.status(404).json({ message: `No user found with this id: ${userId}!` });
-  // }
   res.json(artisan);
 };
 
-module.exports = { getAllUsers, addComment, addLikes };
+const unLike = async (req, res) => {
+  const { artisanId, commentId, userId } = req.params;
+  const artisan = await Artisan.findOneAndUpdate(
+    { _id: artisanId, "comments.commentId": commentId },
+    {
+      $pull: {
+        "comments.$.likes": userId,
+      },
+    },
+    { new: true, runValidators: true }
+  );
+  res.json(artisan);
+};
+
+module.exports = { getAllUsers, addComment, addLikes, unLike};
