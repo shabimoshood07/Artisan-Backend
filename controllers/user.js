@@ -22,6 +22,8 @@ const addComment = async (req, res) => {
   res.json(artisan);
 };
 
+
+
 // Like comment
 const addLikes = async (req, res) => {
   const { artisanId, commentId, userId } = req.params;
@@ -30,6 +32,8 @@ const addLikes = async (req, res) => {
     _id: artisanId,
     "comments.commentId": commentId,
   });
+  // const user = await User.findOne({ _id: userId });
+
 
   const comment = await findArtisan.comments.filter(
     (comm) => comm.commentId == commentId
@@ -51,6 +55,8 @@ const addLikes = async (req, res) => {
   res.json(artisan);
 };
 
+
+
 // Unlike  comment
 const unLike = async (req, res) => {
   const { artisanId, commentId, userId } = req.params;
@@ -65,6 +71,7 @@ const unLike = async (req, res) => {
   );
   res.json(artisan);
 };
+
 
 
 // addRating  comment

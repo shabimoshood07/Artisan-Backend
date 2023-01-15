@@ -10,10 +10,10 @@ const authRouter = require("./routers/auth");
 const userRouter = require("./routers/user");
 const artisanRouter = require("./routers/artisan");
 const app = express();
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.json());
-app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Artisan API");

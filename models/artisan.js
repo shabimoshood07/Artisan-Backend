@@ -106,12 +106,23 @@ artisanSchema.virtual("commentCount").get(function () {
   return this.comments.length;
 });
 
+// rating count
+artisanSchema.virtual("ratingsCount").get(function () {
+  return this.ratings.length;
+});
+
+// Rating
 artisanSchema.virtual("rating").get(function () {
   let total = 0;
+
+  if (this.ratings.length == 0) {
+    return null;
+  }
   this.ratings.map((rate) => (total += rate.ratingValue));
   return (total / this.ratings.length).toFixed(1);
 });
 
+// Unread count
 artisanSchema.virtual("unreadCount").get(function () {
   const unreadcomments = this.comments.filter((comm) => comm.read === false);
 
@@ -127,7 +138,7 @@ artisanSchema.pre("save", async function () {
 // create JWT
 artisanSchema.methods.createJWT = function () {
   return jwt.sign(
-    { userId: this._id, name: this.name, Profession: this.Profession },
+    { artisanId: this._id, role: this.role },
     process.env.JWT_SECRET,
     {
       expiresIn: process.env.JWT_LIFETIME,
