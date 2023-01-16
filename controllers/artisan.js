@@ -8,7 +8,7 @@ const getAllArtisan = async (req, res) => {
 
 const getArtisan = async (req, res) => {
   const { id } = req.params;
-  const artisan = await Artisan.findById({ _id: id });
+  const artisan = await Artisan.findById({ _id: id }).select("-password");
 
   res.status(200).json(artisan);
 };

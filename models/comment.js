@@ -12,7 +12,7 @@ const commentSchema = new Schema(
     commentText: {
       type: String,
       required: true,
-      maxlength: 280,
+      // maxlength: 280,
     },
     createdBy: {
       type: String,
