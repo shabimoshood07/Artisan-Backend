@@ -22,18 +22,15 @@ const addComment = async (req, res) => {
   res.json(artisan);
 };
 
-
-
 // Like comment
 const addLikes = async (req, res) => {
-  const { artisanId, commentId, userId } = req.params;
+  const { commentId, userId } = req.params;
 
   const findArtisan = await Artisan.findOne({
-    _id: artisanId,
+    // _id: artisanId,
     "comments.commentId": commentId,
   });
   // const user = await User.findOne({ _id: userId });
-
 
   const comment = await findArtisan.comments.filter(
     (comm) => comm.commentId == commentId
@@ -44,7 +41,10 @@ const addLikes = async (req, res) => {
   }
 
   const artisan = await Artisan.findOneAndUpdate(
-    { _id: artisanId, "comments.commentId": commentId },
+    {
+      //  _id: artisanId,
+      "comments.commentId": commentId,
+    },
     {
       $push: {
         "comments.$.likes": userId,
@@ -55,13 +55,11 @@ const addLikes = async (req, res) => {
   res.json(artisan);
 };
 
-
-
 // Unlike  comment
 const unLike = async (req, res) => {
-  const { artisanId, commentId, userId } = req.params;
+  const { commentId, userId } = req.params;
   const artisan = await Artisan.findOneAndUpdate(
-    { _id: artisanId, "comments.commentId": commentId },
+    { "comments.commentId": commentId },
     {
       $pull: {
         "comments.$.likes": userId,
@@ -71,8 +69,6 @@ const unLike = async (req, res) => {
   );
   res.json(artisan);
 };
-
-
 
 // addRating  comment
 const addrating = async (req, res) => {
