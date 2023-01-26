@@ -12,7 +12,7 @@ const commentSchema = new Schema(
     commentText: {
       type: String,
       required: true,
-      // maxlength: 280,
+      maxlength: 500,
     },
     createdBy: {
       type: String,
@@ -21,6 +21,7 @@ const commentSchema = new Schema(
     createdAt: {
       type: Date,
       default: Date.now,
+      WritableStream:true
     },
     read: {
       type: Boolean,

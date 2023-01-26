@@ -108,18 +108,24 @@ artisanSchema.virtual("commentCount").get(function () {
 
 // rating count
 artisanSchema.virtual("ratingsCount").get(function () {
-  return this.ratings.length;
+  if (this.ratings) {
+    return this.ratings.length;
+  }
+  return;
 });
 
 // Rating
 artisanSchema.virtual("rating").get(function () {
   let total = 0;
+  if (this.ratings) {
+    if (this.ratings.length == 0) {
+      return null;
+    }
 
-  if (this.ratings.length == 0) {
-    return null;
+    this.ratings.map((rate) => (total += rate.ratingValue));
+    return (total / this.ratings.length).toFixed(1);
   }
-  this.ratings.map((rate) => (total += rate.ratingValue));
-  return (total / this.ratings.length).toFixed(1);
+  return;
 });
 
 // Unread count
