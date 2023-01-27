@@ -88,11 +88,41 @@ const addrating = async (req, res) => {
 const getComment = async (req, res) => {
   const { artisanId, commentId } = req.params;
 
-  const {comments} = await Artisan.findOne({ _id: artisanId }).select(
+  const { comments } = await Artisan.findOne({ _id: artisanId }).select(
     "comments"
   );
   const comment = comments.find((comment) => comment.commentId == commentId);
   res.json(comment);
+};
+
+const readComment = async (req, res) => {
+  const { artisanId, commentId } = req.params;
+  const body = true;
+  const comments = await Artisan.findOne(
+    {
+      "comments.commentId": commentId,
+    },
+    { $set: [{ $getField: "comments.read" }, true] },
+
+    // { $gt: [ { $getField: "price.usd" }, 200 ] }
+    { arrayFilters: [{ $getField: "comments.commentId" }, commentId] }
+    // {
+    //   $set: {
+    //     "comments.$.read": true,
+    //   },
+    // }
+  );
+
+  // ({ _id: 1 },
+  //   { $set: { "grades.$[elem].mean": 100 } },
+  //   { arrayFilters: [{ "elem.grade": { $gte: 85 } }] });
+
+  // ({ "products.productCode": userData.productCode },
+  //   { $set: { "products.$": dataToBeUpdated } });
+
+  // const doc = await Artisan.comments.id(commentId);
+
+  res.json(comments);
 };
 
 module.exports = {
@@ -102,4 +132,5 @@ module.exports = {
   unLike,
   addrating,
   getComment,
+  readComment,
 };

@@ -5,7 +5,8 @@ const {
   addLikes,
   unLike,
   addrating,
-  getComment
+  getComment,
+  readComment
 } = require("../controllers/user");
 const router = express.Router();
 
@@ -15,5 +16,6 @@ router.post("/comment/:artisanId/:userId", addComment);
 router.patch("/rating/:artisanId/:userId", addrating);
 router.patch("/like/:commentId/:userId", addLikes);
 router.patch("/unlike/:commentId/:userId", unLike);
+router.patch("/readcomment/:artisanId/:commentId", readComment);
 
 module.exports = router;
