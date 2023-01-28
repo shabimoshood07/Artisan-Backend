@@ -8,6 +8,6 @@ const router = express.Router();
 
 router.get("/", getAllArtisan);
 router.get("/:id", getArtisan);
-router.put("/readcomment/:artisanId/:commentId", readComment);
+router.patch("/readcomment/:artisanId/:commentId", readComment);
 
 module.exports = router;

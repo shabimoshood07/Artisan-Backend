@@ -17,11 +17,17 @@ const readComment = async (req, res) => {
   const { artisanId, commentId } = req.params;
 
   const artisan = await Artisan.findOneAndUpdate(
-    { _id: artisanId, "comments.commentId": commentId },
-    { $set: { "comments.$.read": true } },
-    { new: true, runValidators: true }
+    {
+      "comments.commentId": commentId,
+    },
+    { $set: { "comments.$[elem].read": true } },
+    {
+      arrayFilters: [{ "elem.commentId": commentId }],
+      new: true,
+      runValidators: true,
+    }
   );
 
-  res.json({ artisan });
+  res.json({ message: "comment read!" });
 };
 module.exports = { getAllArtisan, getArtisan, readComment };
