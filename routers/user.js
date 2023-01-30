@@ -11,8 +11,6 @@ const {
 const router = express.Router();
 
 router.get("/", getAllUsers);
-router.get("/comment/:artisanId/:commentId", getComment);
-router.get("/comments/:artisanId", getAllComments);
 router.post("/comment/:artisanId/:userId", addComment);
 router.patch("/rating/:artisanId/:userId", addrating);
 router.patch("/like/:commentId/:userId", addLikes);

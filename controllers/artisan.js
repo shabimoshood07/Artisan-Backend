@@ -13,6 +13,30 @@ const getArtisan = async (req, res) => {
   res.status(200).json(artisan);
 };
 
+// Get a comment
+const getComment = async (req, res) => {
+  const { artisanId, commentId } = req.params;
+
+  const { comments } = await Artisan.findOne({ _id: artisanId }).select(
+    "comments"
+  );
+  const comment = comments.find((comment) => comment.commentId == commentId);
+  res.json(comment);
+};
+
+// Get all comments
+const getAllComments = async (req, res) => {
+  const { artisanId } = req.params;
+
+  const artisan = await Artisan.findOne({ _id: artisanId });
+  res.json({
+    comments: artisan.comments,
+    commentCount: artisan.commentCount,
+    unreadCount: artisan.unreadCount,
+  });
+};
+
+// Read Comment
 const readComment = async (req, res) => {
   const { artisanId, commentId } = req.params;
 
@@ -30,4 +54,10 @@ const readComment = async (req, res) => {
 
   res.json({ message: "comment read!" });
 };
-module.exports = { getAllArtisan, getArtisan, readComment };
+module.exports = {
+  getAllArtisan,
+  getArtisan,
+  getComment,
+  getAllComments,
+  readComment,
+};

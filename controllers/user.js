@@ -84,38 +84,10 @@ const addrating = async (req, res) => {
   res.json(artisan);
 };
 
-// Get a comment
-const getComment = async (req, res) => {
-  const { artisanId, commentId } = req.params;
-
-  const { comments } = await Artisan.findOne({ _id: artisanId }).select(
-    "comments"
-  );
-  const comment = comments.find((comment) => comment.commentId == commentId);
-  res.json(comment);
-};
-
-// Get all comment
-const getAllComments = async (req, res) => {
-  const { artisanId, commentId } = req.params;
-
-  const artisan = await Artisan.findOne({ _id: artisanId });
-  res.json({
-    comments: artisan.comments,
-    commentCount: artisan.commentCount,
-    unreadCount: artisan.unreadCount,
-  });
-};
-
-
-
 module.exports = {
   getAllUsers,
   addComment,
   addLikes,
   unLike,
   addrating,
-  getComment,
-  getAllComments,
-
 };
