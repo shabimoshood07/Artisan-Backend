@@ -12,12 +12,18 @@ const getAllUsers = async (req, res) => {
 const addComment = async (req, res) => {
   const { artisanId, userId } = req.params;
 
+  let commentBy;
   const user = await User.findById(userId);
-  // const artisan = await Artisan.findById(artisanId);
+  if (user) {
+    commentBy = artisan.username;
+  } else {
+    const artisan = await Artisan.findById(artisanId);
+    commentBy = artisan.businessName;
+  }
 
   const artisan = await Artisan.findByIdAndUpdate(
     { _id: artisanId },
-    { $addToSet: { comments: { ...req.body, createdBy: user.username } } },
+    { $addToSet: { comments: { ...req.body, createdBy: commentBy } } },
     { new: true, runValidators: true }
   );
   res.json({ msg: "comment sent successfuly" });

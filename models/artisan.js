@@ -103,7 +103,9 @@ const artisanSchema = new mongoose.Schema(
 
 // comment count
 artisanSchema.virtual("commentCount").get(function () {
-  return this.comments.length;
+  if (this.comments) {
+    return this.comments.length;
+  }
 });
 
 // rating count
@@ -130,9 +132,11 @@ artisanSchema.virtual("rating").get(function () {
 
 // Unread count
 artisanSchema.virtual("unreadCount").get(function () {
-  const unreadcomments = this.comments.filter((comm) => comm.read === false);
-
-  return unreadcomments.length;
+  if (this.comments) {
+    const unreadcomments = this.comments.filter((comm) => comm.read === false);
+    return unreadcomments.length;
+  }
+  return;
 });
 
 // hash password
