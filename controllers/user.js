@@ -1,6 +1,5 @@
 const User = require("../models/user");
 const Artisan = require("../models/artisan");
-const Comment = require("../models/comment");
 
 // Get all users
 const getAllUsers = async (req, res) => {
@@ -15,7 +14,7 @@ const addComment = async (req, res) => {
   let commentBy;
   const user = await User.findById(userId);
   if (user) {
-    commentBy = artisan.username;
+    commentBy = user.username;
   } else {
     const artisan = await Artisan.findById(artisanId);
     commentBy = artisan.businessName;
@@ -29,6 +28,8 @@ const addComment = async (req, res) => {
   res.json({ msg: "comment sent successfuly" });
 };
 
+// merger like and unlike routes by using toggles
+
 // Like comment
 const addLikes = async (req, res) => {
   const { commentId, userId } = req.params;
@@ -37,7 +38,7 @@ const addLikes = async (req, res) => {
     "comments.commentId": commentId,
   });
 
-  const comment = await findArtisan.comments.filter(
+  const comment = findArtisan.comments.filter(
     (comm) => comm.commentId == commentId
   );
 
@@ -87,7 +88,7 @@ const addrating = async (req, res) => {
     },
     { new: true, runValidators: true }
   );
-  res.json(artisan);
+  res.json({ message: "Rating added successfully" });
 };
 
 module.exports = {
