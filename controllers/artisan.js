@@ -72,6 +72,19 @@ const getRatings = async (req, res) => {
   res.json(ratings);
 };
 
+// get Artisan by search
+
+const getArtisansBySearch = async (req, res) => {
+  const { location, profession } = req.query;
+  console.log(location);
+  const artisans = await Artisan.find({
+    address: { $regex: location, $options: "i" },
+    profession: { $regex: profession, $options: "i" },
+  }).select("-password");
+  if (!artisans) res.status(200).json({ message: "No artisan found" });
+
+  res.status(200).json(artisans);
+};
 module.exports = {
   getAllArtisan,
   getArtisan,
@@ -79,4 +92,5 @@ module.exports = {
   getAllComments,
   readComment,
   getRatings,
+  getArtisansBySearch,
 };
