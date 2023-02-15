@@ -9,7 +9,7 @@ const ratingSchema = require("./rating");
 const artisanSchema = new mongoose.Schema(
   {
     phoneNumber: {
-      // unique: true,
+      unique: "Phone number already exists",
       type: mongoose.SchemaTypes.Phone,
       required: "Please provide phone number",
       allowBlank: false,
@@ -35,7 +35,8 @@ const artisanSchema = new mongoose.Schema(
     businessName: {
       type: String,
       required: [true, "Please provide business name"],
-      // unique: true,
+      unique: "Business name already exists",
+      // unique: [true, "business name already exists"],
       maxlength: 50,
       minlength: 3,
     },
@@ -46,7 +47,7 @@ const artisanSchema = new mongoose.Schema(
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
         "Please provide a valid email",
       ],
-      // unique: true,
+      unique: "Email already exists",
     },
     password: {
       type: String,
@@ -163,8 +164,8 @@ artisanSchema.methods.comparePassword = async function (canditatePassword) {
 };
 
 // Unique Validator
-// artisanSchema.plugin(uniqueValidator, {
-//   message: "{PATH} already exist",
-// });
+artisanSchema.plugin(uniqueValidator, {
+  message: "{PATH} already exist",
+});
 
 module.exports = mongoose.model("Artisan", artisanSchema);

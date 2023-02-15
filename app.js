@@ -5,6 +5,9 @@ const cors = require("cors");
 // COnnection to DB
 const connectDB = require("./connectionDB/connection");
 
+// import error handler
+const errorHandler = require("./middlewares/errorHandler");
+
 // Import Routers
 const authRouter = require("./routers/auth");
 const userRouter = require("./routers/user");
@@ -23,6 +26,8 @@ app.get("/", (req, res) => {
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/artisan", artisanRouter);
+
+app.use(errorHandler);
 
 const port = 5000 || process.env.PORT;
 

@@ -8,7 +8,7 @@ const getAllArtisan = async (req, res) => {
 };
 
 // GET ARTISAN
-const getArtisan = async (req, res) => {
+const getArtisan = async (req, res, next) => {
   const { id } = req.params;
 
   try {
@@ -16,7 +16,7 @@ const getArtisan = async (req, res) => {
     if (!artisan) return res.status(404).json({ message: "No artisan found" });
     res.status(200).json(artisan);
   } catch (error) {
-    res.status(500).json(error);
+    next(error);
   }
 };
 
@@ -85,6 +85,14 @@ const getArtisansBySearch = async (req, res) => {
 
   res.status(200).json(artisans);
 };
+
+// Get Feature Artisans
+const getfeaturedArtisans = async (req, res) => {
+  const artisans = await Artisan.find({}).select("-password -comments ");
+  if (!artisans) res.status(200).json({ message: "No artisan found" });
+
+  res.status(200).json(artisans);
+};
 module.exports = {
   getAllArtisan,
   getArtisan,
@@ -93,4 +101,5 @@ module.exports = {
   readComment,
   getRatings,
   getArtisansBySearch,
+  getfeaturedArtisans,
 };
