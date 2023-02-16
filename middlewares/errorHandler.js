@@ -5,10 +5,6 @@ const errorHandler = async (err, req, res, next) => {
     message: err.message || "Something went wrong try again later",
   };
 
-  // if (err instanceof CustomAPIError) {
-  //   return res.status(err.statusCode).json({ msg: err.message })
-  // }
-
   if (err.name === "ValidationError") {
     customError.message = Object.values(err.errors)
       .map((item) => item.message)

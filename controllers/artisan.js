@@ -13,7 +13,11 @@ const getArtisan = async (req, res, next) => {
 
   try {
     const artisan = await Artisan.findById({ _id: id }).select("-password");
-    if (!artisan) return res.status(404).json({ message: "No artisan found" });
+    if (!artisan) {
+      // return res.status(404).json({ message: "No artisan found" });
+      res.status(404)
+      throw new Error("No Artisan found")
+    }
     res.status(200).json(artisan);
   } catch (error) {
     next(error);

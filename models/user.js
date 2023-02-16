@@ -56,8 +56,8 @@ userSchema.methods.comparePassword = async function (canditatePassword) {
 };
 
 // Unique Validator
-// artisanSchema.plugin(uniqueValidator, {
-//   message: "{PATH} already exist",
-// });
+userSchema.plugin(uniqueValidator, {
+  message: "{PATH} already exist",
+});
 
 module.exports = mongoose.model("User", userSchema);

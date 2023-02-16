@@ -34,30 +34,34 @@ const addComment = async (req, res) => {
 const addLikes = async (req, res) => {
   const { commentId, userId } = req.params;
 
-  const findArtisan = await Artisan.findOne({
-    "comments.commentId": commentId,
-  });
-
-  const comment = findArtisan.comments.filter(
-    (comm) => comm.commentId == commentId
-  );
-
-  if (comment[0].likes.includes(userId)) {
-    return res.json({ msg: "You can not like a comment twice" });
-  }
-
-  const artisan = await Artisan.findOneAndUpdate(
-    {
+  try {
+    const findArtisan = await Artisan.findOne({
       "comments.commentId": commentId,
-    },
-    {
-      $push: {
-        "comments.$.likes": userId,
+    });
+
+    const comment = findArtisan.comments.filter(
+      (comm) => comm.commentId == commentId
+    );
+
+    if (comment[0].likes.includes(userId)) {
+      return res.json({ msg: "You can not like a comment twice" });
+    }
+
+    const artisan = await Artisan.findOneAndUpdate(
+      {
+        "comments.commentId": commentId,
       },
-    },
-    { new: true, runValidators: true }
-  );
-  res.json({ msg: "you liked a comment" });
+      {
+        $push: {
+          "comments.$.likes": userId,
+        },
+      },
+      { new: true, runValidators: true }
+    );
+    res.json({ msg: "you liked a comment" });
+  } catch (error) {
+    next(error);
+  }
 };
 
 // Unlike  comment
