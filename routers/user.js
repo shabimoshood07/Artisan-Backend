@@ -12,9 +12,9 @@ const {
 const router = express.Router();
 
 router.get("/", getAllUsers);
-router.post("/comment/:artisanId/:userId", addComment);
-router.patch("/rating/:artisanId/:userId", addrating);
+router.post("/comment/:artisanId/:userId", authentication, addComment);
+router.patch("/rating/:artisanId/:userId", authentication, addrating);
 router.patch("/like/:commentId/:userId", authentication, addLikes);
-router.patch("/unlike/:commentId/:userId", unLike);
+router.patch("/unlike/:commentId/:userId", authentication, unLike);
 
 module.exports = router;

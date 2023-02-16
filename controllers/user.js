@@ -10,13 +10,13 @@ const getAllUsers = async (req, res) => {
 // Add comment
 const addComment = async (req, res) => {
   const { artisanId, userId } = req.params;
-
+  // const { userId, role } = req.user;
   let commentBy;
-  const user = await User.findById(userId);
-  if (user) {
+  if (req.user) {
+    const user = await User.findById(req.user.userId);
     commentBy = user.username;
-  } else {
-    const artisan = await Artisan.findById(artisanId);
+  } else if (req.artisan) {
+    const artisan = await Artisan.findById(req.artisan.artisanId);
     commentBy = artisan.businessName;
   }
 
@@ -32,6 +32,7 @@ const addComment = async (req, res) => {
 
 // Like comment
 const addLikes = async (req, res) => {
+  console.log(req.user);
   const { commentId, userId } = req.params;
 
   try {

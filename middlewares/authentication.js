@@ -11,10 +11,13 @@ const authentication = async (req, res, next) => {
   const token = authHeader.split(" ")[1];
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = { userId: payload.userId, role: payload.role };
+    if (payload.role == "user") {
+      req.user = { userId: payload.userId, role: payload.role };
+    } else {
+      req.artisan = { artisanId: payload.artisanId, role: payload.role };
+    }
     next();
-  } catch (error) {
-    // throw new Error("Authentication invalid");
+  } catch (error) { 
     next(error);
   }
 };
