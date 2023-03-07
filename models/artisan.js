@@ -89,6 +89,7 @@ const artisanSchema = new mongoose.Schema(
     },
     profileImage: {
       type: String,
+      default:"https://res.cloudinary.com/xabi007/image/upload/v1644484061/profileImage/avatar-g2b4feb965_1280_qbyhur.pngF"
     },
     comments: [commentSchema],
     ratings: [ratingSchema],

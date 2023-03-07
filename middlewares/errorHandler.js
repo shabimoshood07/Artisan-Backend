@@ -22,7 +22,14 @@ const errorHandler = async (err, req, res, next) => {
     customError.statusCode = 404;
   }
 
-  return res.status(customError.statusCode).json({ message: customError.message });
+  if (err.name === "CastError" && err.path === "commentId") {
+    customError.message = `No comment found with id : ${err.value}`;
+    customError.statusCode = 404;
+  }
+
+  return res
+    .status(customError.statusCode)
+    .json({ message: customError.message });
 };
 
 module.exports = errorHandler;

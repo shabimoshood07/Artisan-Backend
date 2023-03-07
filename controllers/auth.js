@@ -34,6 +34,7 @@ const login = async (req, res) => {
 
   if (!artisan) {
     const user = await User.findOne({ username: data });
+    if (!user) return res.status(403).json({ message: "Invalid credentials" });
     const passwordCheck = user.comparePassword(password);
     if (!passwordCheck) {
       return res.status(401).json({ msg: "invalid credentials" });
@@ -62,4 +63,13 @@ const login = async (req, res) => {
   });
 };
 
-module.exports = { artisanSignUp, userSignUp, login };
+const updateProfile = async (req, res) => {
+  // const {id} = req.params
+  if (req.artisan) {
+    const updatedArtisan = Artisan.findOneAndUpdate({
+      _id: req.artisan.artisanId,
+    });
+  }
+};
+
+module.exports = { artisanSignUp, userSignUp, login, updateProfile };
