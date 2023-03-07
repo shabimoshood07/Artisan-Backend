@@ -65,10 +65,28 @@ const login = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   // const {id} = req.params
+
+  // console.log(req.artisan);
+
   if (req.artisan) {
-    const updatedArtisan = Artisan.findOneAndUpdate({
-      _id: req.artisan.artisanId,
-    });
+    const updatedArtisan = await Artisan.findOneAndUpdate(
+      {
+        _id: req.artisan.artisanId,
+      },
+      { ...req.body },
+      { new: true, runValidators: true }
+    );
+    res.status(200).json({ message: "profile updated successfully" });
+  }
+  if (req.user) {
+    const updatedUser = await User.findOneAndUpdate(
+      {
+        _id: req.user.userId,
+      },
+      { ...req.body },
+      { new: true, runValidators: true }
+    );
+    res.status(200).json({ message: "profile updated successfully" });
   }
 };
 
