@@ -37,7 +37,7 @@ const login = async (req, res) => {
     if (!user) return res.status(403).json({ message: "Invalid credentials" });
     const passwordCheck = user.comparePassword(password);
     if (!passwordCheck) {
-      return res.status(401).json({ msg: "invalid credentials" });
+      return res.status(401).json({ message: "invalid credentials" });
     }
     const token = user.createJWT();
     return res.json({
@@ -48,10 +48,12 @@ const login = async (req, res) => {
       id: user._id,
     });
   }
-  const passwordCheck = artisan.comparePassword(password);
+  const passwordCheck = await artisan.comparePassword(password);
+
+  console.log(passwordCheck);
 
   if (!passwordCheck) {
-    return res.status(401).json({ msg: "invalid credentials" });
+    return res.status(401).json({ message: "invalid credentials" });
   }
   const token = artisan.createJWT();
   res.json({
@@ -60,14 +62,11 @@ const login = async (req, res) => {
     role: artisan.role,
     token: token,
     id: artisan._id,
+    password: artisan.password,
   });
 };
 
 const updateProfile = async (req, res) => {
-  // const {id} = req.params
-
-  // console.log(req.artisan);
-
   if (req.artisan) {
     const updatedArtisan = await Artisan.findOneAndUpdate(
       {
@@ -76,6 +75,8 @@ const updateProfile = async (req, res) => {
       { ...req.body },
       { new: true, runValidators: true }
     );
+    if (!updatedArtisan)
+      return res.status(500).json({ message: "something went wrong" });
     res.status(200).json({ message: "profile updated successfully" });
   }
   if (req.user) {
@@ -86,8 +87,42 @@ const updateProfile = async (req, res) => {
       { ...req.body },
       { new: true, runValidators: true }
     );
+    if (!updatedUser)
+      return res.status(500).json({ message: "something went wrong" });
     res.status(200).json({ message: "profile updated successfully" });
   }
 };
 
-module.exports = { artisanSignUp, userSignUp, login, updateProfile };
+const changePassword = async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  if (req.artisan) {
+    const artisan = await Artisan.findOne({ _id: req.artisan.artisanId });
+    if (!artisan) return res.status(404).json({ message: "No artisan found" });
+
+    const passwordCheck = await artisan.comparePassword(oldPassword);
+    // const passwordCheck = artisan.password === oldPassword;
+    if (!passwordCheck)
+      return res.status(401).json({ message: "Inavlid credentials" });
+
+    const updatedArtisan = await Artisan.findOneAndUpdate(
+      { _id: req.artisan.artisanId },
+      {
+        password: newPassword,
+      },
+      { new: true, runValidators: true }
+    );
+
+    updatedArtisan.save();
+    res
+      .status(200)
+      .json({ message: "Password updated successfully ", updatedArtisan });
+  }
+};
+
+module.exports = {
+  artisanSignUp,
+  userSignUp,
+  login,
+  updateProfile,
+  changePassword,
+};
