@@ -15,8 +15,8 @@ const getArtisan = async (req, res, next) => {
     const artisan = await Artisan.findById({ _id: id }).select("-password");
     if (!artisan) {
       // return res.status(404).json({ message: "No artisan found" });
-      res.status(404)
-      throw new Error("No Artisan found")
+      res.status(404);
+      throw new Error("No Artisan found");
     }
     res.status(200).json(artisan);
   } catch (error) {
@@ -79,15 +79,49 @@ const getRatings = async (req, res) => {
 // get Artisan by search
 
 const getArtisansBySearch = async (req, res) => {
-  const { location, profession } = req.query;
-  console.log(location);
+  const { location, profession, page } = req.query;
+  const LIMIT = 10;
+
   const artisans = await Artisan.find({
     address: { $regex: location, $options: "i" },
     profession: { $regex: profession, $options: "i" },
-  }).select("-password");
-  if (!artisans) res.status(200).json({ message: "No artisan found" });
+  })
+    .select("-password  -comments")
+    .exec();
 
-  res.status(200).json(artisans);
+  artisans.sort((a, b) => b.rating - a.rating);
+
+  const startIndex = (Number(page) - 1) * LIMIT;
+  const endIndex = startIndex + LIMIT;
+  const results = artisans.slice(startIndex, endIndex);
+
+  res.status(200).json({
+    artisans: results,
+    currentPage: Number(page),
+    numberOfPages: Math.ceil(artisans.length / LIMIT),
+  });
+
+  // const LIMIT = 10;
+  // const startIndex = (Number(page) - 1) * LIMIT;
+  // // get the starting index of every page
+
+  // const artisans = await Artisan.find({
+  //   address: { $regex: location, $options: "i" },
+  //   profession: { $regex: profession, $options: "i" },
+  // })
+  //   .sort({ rating: 1 })
+  //   .select("-password  -comments")
+  //   .limit(LIMIT)
+  //   .skip(startIndex);
+
+  // if (!artisans) res.status(200).json({ message: "No artisan found" });
+
+  // const total = await Artisan.countDocuments({});
+  // res.status(200).json({
+  //   artisans: artisans,
+  //   currentPage: Number(page),
+  //   numberOfPages: Math.ceil(total / LIMIT),
+  // });
 };
 
 // Get Feature Artisans
@@ -97,6 +131,8 @@ const getfeaturedArtisans = async (req, res) => {
 
   res.status(200).json(artisans);
 };
+
+const deleteArtisan = async (req, res) => {};
 module.exports = {
   getAllArtisan,
   getArtisan,
@@ -106,4 +142,5 @@ module.exports = {
   getRatings,
   getArtisansBySearch,
   getfeaturedArtisans,
+  deleteArtisan,
 };

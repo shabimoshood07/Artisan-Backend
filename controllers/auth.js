@@ -1,8 +1,5 @@
 const Artisan = require("../models/artisan");
 const User = require("../models/user");
-const upload = require("../multer");
-const fs = require("fs");
-const path = require("path");
 
 const artisanSignUp = async (req, res, next) => {
   try {
@@ -50,8 +47,6 @@ const login = async (req, res) => {
   }
   const passwordCheck = await artisan.comparePassword(password);
 
-  console.log(passwordCheck);
-
   if (!passwordCheck) {
     return res.status(401).json({ message: "invalid credentials" });
   }
@@ -62,7 +57,6 @@ const login = async (req, res) => {
     role: artisan.role,
     token: token,
     id: artisan._id,
-    password: artisan.password,
   });
 };
 
@@ -94,13 +88,16 @@ const updateProfile = async (req, res) => {
 };
 
 const changePassword = async (req, res) => {
-  const { oldPassword, newPassword } = req.body;
+  const { currentPassword, newPassword } = req.body;
+  if (!currentPassword || !newPassword)
+    return res
+      .status(400)
+      .json({ message: "Enter your current password and new password" });
   if (req.artisan) {
     const artisan = await Artisan.findOne({ _id: req.artisan.artisanId });
     if (!artisan) return res.status(404).json({ message: "No artisan found" });
 
-    const passwordCheck = await artisan.comparePassword(oldPassword);
-    // const passwordCheck = artisan.password === oldPassword;
+    const passwordCheck = await artisan.comparePassword(currentPassword);
     if (!passwordCheck)
       return res.status(401).json({ message: "Inavlid credentials" });
 
@@ -112,10 +109,31 @@ const changePassword = async (req, res) => {
       { new: true, runValidators: true }
     );
 
-    updatedArtisan.save();
+    await updatedArtisan.save();
     res
       .status(200)
-      .json({ message: "Password updated successfully ", updatedArtisan });
+      .json({ message: "Password updated successfully " });
+  }
+  if (req.user) {
+    const user = await User.findOne({ _id: req.user.userId });
+    if (!user) return res.status(404).json({ message: "No user found" });
+
+    const passwordCheck = await user.comparePassword(currentPassword);
+    if (!passwordCheck)
+      return res.status(401).json({ message: "Inavlid credentials" });
+
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: req.artisan.artisanId },
+      {
+        password: newPassword,
+      },
+      { new: true, runValidators: true }
+    );
+
+    await updatedUser.save();
+    res
+      .status(200)
+      .json({ message: "Password updated successfully " });
   }
 };
 

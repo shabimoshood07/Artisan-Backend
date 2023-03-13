@@ -9,10 +9,11 @@ const {
   getArtisansBySearch,
   getfeaturedArtisans,
 } = require("../controllers/artisan");
+const authentication = require("../middlewares/authentication");
 const router = express.Router();
 
 router.get("/", getAllArtisan);
-router.get("/search", getArtisansBySearch);
+router.get("/search",authentication, getArtisansBySearch);
 router.get("/featured", getfeaturedArtisans);
 router.get("/:id", getArtisan);
 router.get("/comments/:artisanId", getAllComments);

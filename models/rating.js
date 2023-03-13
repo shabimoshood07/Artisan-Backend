@@ -26,9 +26,5 @@ const ratingSchema = new Schema(
   }
 );
 
-// // likes count
-// ratingSchema.virtual("rating").get(function () {
-//   return( this.likes.length);
-// });
 
 module.exports = ratingSchema;

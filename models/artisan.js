@@ -89,10 +89,22 @@ const artisanSchema = new mongoose.Schema(
     },
     profileImage: {
       type: String,
-      default:"https://res.cloudinary.com/xabi007/image/upload/v1644484061/profileImage/avatar-g2b4feb965_1280_qbyhur.pngF"
+      default:
+        "https://res.cloudinary.com/xabi007/image/upload/v1644484061/profileImage/avatar-g2b4feb965_1280_qbyhur.pngF",
     },
     comments: [commentSchema],
     ratings: [ratingSchema],
+    rating: {
+      type: Number,
+      get: function () {
+        let total = 0;
+        if (this.ratings.length == 0) {
+          return 0;
+        }
+        this.ratings.map((rate) => (total += rate.ratingValue));
+        return Number((total / this.ratings.length).toFixed(1));
+      },
+    },
   },
   {
     toJSON: {
@@ -119,18 +131,18 @@ artisanSchema.virtual("ratingsCount").get(function () {
 });
 
 // Rating
-artisanSchema.virtual("rating").get(function () {
-  let total = 0;
-  if (this.ratings) {
-    if (this.ratings.length == 0) {
-      return null;
-    }
+// artisanSchema.virtual("ratinG").get(function () {
+//   let total = 0;
+//   if (this.ratings) {
+//     if (this.ratings.length == 0) {
+//       return 0;
+//     }
 
-    this.ratings.map((rate) => (total += rate.ratingValue));
-    return (total / this.ratings.length).toFixed(1);
-  }
-  return;
-});
+//     this.ratings.map((rate) => (total += rate.ratingValue));
+//     return (total / this.ratings.length).toFixed(1);
+//   }
+//   return;
+// });
 
 // Unread count
 artisanSchema.virtual("unreadCount").get(function () {
