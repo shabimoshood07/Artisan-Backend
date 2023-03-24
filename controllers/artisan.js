@@ -108,11 +108,9 @@ const getArtisansBySearch = async (req, res) => {
   });
 };
 
-// Get Feature Artisans
+// Get Featured Artisans
 const getfeaturedArtisans = async (req, res) => {
   const loggedInArtisan = req.artisan.artisanId;
-
-
   let artisans = await Artisan.find({}).select("-password -comments ");
   if (!artisans) res.status(200).json({ message: "No artisan found" });
 
