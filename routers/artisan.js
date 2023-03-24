@@ -13,8 +13,8 @@ const authentication = require("../middlewares/authentication");
 const router = express.Router();
 
 router.get("/", getAllArtisan);
-router.get("/search",authentication, getArtisansBySearch);
-router.get("/featured", getfeaturedArtisans);
+router.get("/search", authentication, getArtisansBySearch);
+router.get("/featured", authentication, getfeaturedArtisans);
 router.get("/:id", getArtisan);
 router.get("/comments/:artisanId", getAllComments);
 router.get("/comment/:artisanId/:commentId", getComment);

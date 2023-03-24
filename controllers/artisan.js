@@ -79,15 +79,21 @@ const getRatings = async (req, res) => {
 // get Artisan by search
 
 const getArtisansBySearch = async (req, res) => {
+  const loggedInArtisan = req.artisan.artisanId;
+
   const { location, profession, page } = req.query;
   const LIMIT = 10;
 
-  const artisans = await Artisan.find({
+  let artisans = await Artisan.find({
     address: { $regex: location, $options: "i" },
     profession: { $regex: profession, $options: "i" },
   })
     .select("-password  -comments")
     .exec();
+
+  if (loggedInArtisan) {
+    artisans = artisans.filter((artisan) => artisan._id != loggedInArtisan);
+  }
 
   artisans.sort((a, b) => b.rating - a.rating);
 
@@ -100,34 +106,24 @@ const getArtisansBySearch = async (req, res) => {
     currentPage: Number(page),
     numberOfPages: Math.ceil(artisans.length / LIMIT),
   });
-
-  // const LIMIT = 10;
-  // const startIndex = (Number(page) - 1) * LIMIT;
-  // // get the starting index of every page
-
-  // const artisans = await Artisan.find({
-  //   address: { $regex: location, $options: "i" },
-  //   profession: { $regex: profession, $options: "i" },
-  // })
-  //   .sort({ rating: 1 })
-  //   .select("-password  -comments")
-  //   .limit(LIMIT)
-  //   .skip(startIndex);
-
-  // if (!artisans) res.status(200).json({ message: "No artisan found" });
-
-  // const total = await Artisan.countDocuments({});
-  // res.status(200).json({
-  //   artisans: artisans,
-  //   currentPage: Number(page),
-  //   numberOfPages: Math.ceil(total / LIMIT),
-  // });
 };
 
 // Get Feature Artisans
 const getfeaturedArtisans = async (req, res) => {
-  const artisans = await Artisan.find({}).select("-password -comments ");
+  const loggedInArtisan = req.artisan.artisanId;
+
+  console.log(loggedInArtisan);
+
+  let artisans = await Artisan.find({}).select("-password -comments ");
   if (!artisans) res.status(200).json({ message: "No artisan found" });
+
+  if (loggedInArtisan) {
+    artisans = artisans.filter((artisan) => artisan._id != loggedInArtisan);
+    artisans = artisans.sort((a, b) => b.rating - a.rating).slice(0, 10);
+    return res.status(200).json(artisans);
+  }
+
+  artisans.sort((a, b) => b.rating - a.rating).slice(0, 10);
 
   res.status(200).json(artisans);
 };
