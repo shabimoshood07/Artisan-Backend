@@ -13,7 +13,8 @@ const authRouter = require("./routers/auth");
 const userRouter = require("./routers/user");
 const artisanRouter = require("./routers/artisan");
 const app = express();
-app.use(cors());
+// app.use(cors());
+app.use(cors({ credentials: true }));
 // app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(bodyParser.urlencoded({ extended: false }));
 
