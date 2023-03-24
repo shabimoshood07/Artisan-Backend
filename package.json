@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "app.js", 
-    "build":"npm run build"
+    "start": "app.js"
   },
   "author": "Shabi Moshood",
   "license": "ISC",
