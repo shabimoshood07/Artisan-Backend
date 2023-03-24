@@ -108,7 +108,7 @@ const getArtisansBySearch = async (req, res) => {
   });
 };
 
-// Get Featured Artisans
+// Get Featured Artisans controller
 const getfeaturedArtisans = async (req, res) => {
   const loggedInArtisan = req.artisan.artisanId;
   let artisans = await Artisan.find({}).select("-password -comments ");
