@@ -32,7 +32,7 @@ const login = async (req, res) => {
   if (!artisan) {
     const user = await User.findOne({ username: data });
     if (!user) return res.status(403).json({ message: "Invalid credentials" });
-    const passwordCheck = user.comparePassword(password);
+    const passwordCheck = await user.comparePassword(password);
     if (!passwordCheck) {
       return res.status(401).json({ message: "invalid credentials" });
     }
@@ -110,9 +110,7 @@ const changePassword = async (req, res) => {
     );
 
     await updatedArtisan.save();
-    res
-      .status(200)
-      .json({ message: "Password updated successfully " });
+    res.status(200).json({ message: "Password updated successfully " });
   }
   if (req.user) {
     const user = await User.findOne({ _id: req.user.userId });
@@ -131,9 +129,7 @@ const changePassword = async (req, res) => {
     );
 
     await updatedUser.save();
-    res
-      .status(200)
-      .json({ message: "Password updated successfully " });
+    res.status(200).json({ message: "Password updated successfully " });
   }
 };
 
