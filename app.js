@@ -14,12 +14,29 @@ const userRouter = require("./routers/user");
 const artisanRouter = require("./routers/artisan");
 const app = express();
 // app.use(cors());
-
 app.use(
   cors({
-    origin: ["https://searchartisans.netlify.app", "http://localhost:3000"],
+    origin: "https://artisan-backend-eight.vercel.app/",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Origin",
+      "X-Requested-With",
+      "Accept",
+      "x-client-key",
+      "x-client-token",
+      "x-client-secret",
+      "Authorization",
+    ],
+    credentials: true,
   })
 );
+// app.use(
+//   cors({
+//     origin: ["https://searchartisans.netlify.app", "http://localhost:3000"],
+
+//   })
+// );
 // app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(bodyParser.urlencoded({ extended: false }));
 
