@@ -110,7 +110,11 @@ const getArtisansBySearch = async (req, res) => {
 
 // Get Featured Artisans controller
 const getfeaturedArtisans = async (req, res) => {
-  const loggedInArtisan = req.artisan.artisanId;
+  let loggedInArtisan = null;
+
+  if (req.artisan.artisanId) {
+    loggedInArtisan = req.artisan.artisanId;
+  }
   let artisans = await Artisan.find({}).select("-password -comments ");
   if (!artisans) res.status(200).json({ message: "No artisan found" });
 
