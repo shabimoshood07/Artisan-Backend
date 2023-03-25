@@ -16,7 +16,7 @@ const app = express();
 // app.use(cors());
 app.use(
   cors({
-    origin: "https://artisan-backend-eight.vercel.app/",
+    origin: "https://searchartisans.netlify.app/",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"],
     allowedHeaders: [
       "Content-Type",
