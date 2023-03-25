@@ -17,8 +17,11 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["https://searchartisans.netlify.app", "http://localhost:3000"],
-  })
+    origin:'*', 
+    credentials:true,
+    // access-control-allow-credentials:true,
+    optionSuccessStatus:200,
+ })
 );
 // app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(bodyParser.urlencoded({ extended: false }));
