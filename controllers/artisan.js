@@ -79,7 +79,7 @@ const getRatings = async (req, res) => {
 // get Artisan by search
 
 const getArtisansBySearch = async (req, res) => {
-  const loggedInArtisan = req.artisan.artisanId;
+  const loggedInArtisan = req?.artisan?.artisanId;
 
   const { location, profession, page } = req.query;
   const LIMIT = 10;
