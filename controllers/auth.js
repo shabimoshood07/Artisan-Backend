@@ -2,6 +2,7 @@ const Artisan = require("../models/artisan");
 const User = require("../models/user");
 
 const artisanSignUp = async (req, res, next) => {
+  console.log(req.body.email);
   const artisanExists = await Artisan.findOne({ email: req.body.email });
   if (artisanExists) {
     return res.status(401).json({
@@ -9,7 +10,7 @@ const artisanSignUp = async (req, res, next) => {
         "Sorry, this email is already taken. Please use a different email or try logging in",
     });
   } else {
-    const userExists = await Artisan.findOne({ email: req.body.email });
+    const userExists = await User.findOne({ email: req.body.email });
     if (userExists) {
       return res.status(401).json({
         message:
