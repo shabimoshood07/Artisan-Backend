@@ -7,10 +7,8 @@ const {
   changePassword,
 } = require("../controllers/auth");
 const auth = require("../middlewares/authentication");
-const upload = require("../multer");
 const router = express.Router();
 
-// router.post("/signup/artisan", upload.single("profileImage"), artisanSignUp);
 router.post("/signup/artisan", artisanSignUp);
 router.post("/signup/user", userSignUp);
 router.post("/login", login);

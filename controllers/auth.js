@@ -2,6 +2,22 @@ const Artisan = require("../models/artisan");
 const User = require("../models/user");
 
 const artisanSignUp = async (req, res, next) => {
+  const artisanExists = await Artisan.findOne({ email: req.body.email });
+  if (artisanExists) {
+    return res.status(401).json({
+      message:
+        "Sorry, this email is already taken. Please use a different email or try logging in",
+    });
+  } else {
+    const userExists = await Artisan.findOne({ email: req.body.email });
+    if (userExists) {
+      return res.status(401).json({
+        message:
+          "Sorry, this email is already taken. Please use a different email or try logging in",
+      });
+    }
+  }
+
   try {
     const artisan = await Artisan.create({
       ...req.body,
@@ -15,14 +31,33 @@ const artisanSignUp = async (req, res, next) => {
   }
 };
 
-const userSignUp = async (req, res) => {
-  const user = await User.create({
-    ...req.body,
-  });
+const userSignUp = async (req, res, next) => {
+  const artisanExists = await Artisan.findOne({ email: req.body.email });
+  if (artisanExists) {
+    return res.status(401).json({
+      message:
+        "Sorry, this email is already taken. Please use a different email or try logging in",
+    });
+  } else {
+    const userExists = await Artisan.findOne({ email: req.body.email });
+    if (userExists) {
+      return res.status(401).json({
+        message:
+          "Sorry, this email is already taken. Please use a different email or try logging in",
+      });
+    }
+  }
+  try {
+    const user = await User.create({
+      ...req.body,
+    });
 
-  const token = user.createJWT();
+    const token = user.createJWT();
 
-  res.status(201).json({ user, token });
+    res.status(201).json({ user, token });
+  } catch (error) {
+    next(error);
+  }
 };
 
 const login = async (req, res) => {
