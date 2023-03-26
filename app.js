@@ -16,7 +16,7 @@ const app = express();
 // app.use(cors());
 app.use(
   cors({
-    origin: "https://searchartisans.netlify.app",
+    origin: ["https://searchartisans.netlify.app", "http://localhost:3000"],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"],
     allowedHeaders: [
       "Content-Type",
